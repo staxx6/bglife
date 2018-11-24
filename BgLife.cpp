@@ -18,7 +18,7 @@ int main()
 BgLife::BgLife(GameInfo* info) : Game(info)
 {   
     std::cout << "BgLife constructor gameName: " 
-                << getGameInfo()->getName() << std::endl;
+        << getGameInfo()->getName() << std::endl;
 }
 
 int BgLife::init()

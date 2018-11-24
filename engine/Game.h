@@ -4,6 +4,7 @@
 #include <string>
 
 #include "GameInfo.h"
+#include "Stepper.h"
 
 class Game 
 {
@@ -17,8 +18,8 @@ public:
     GameInfo *getGameInfo() const { return info; }
     void setExitGame(bool exit) { exitGame = exit; }
     void setPauseGame(bool pause) { pauseGame = pause; }
-    bool isExitGame() { return exitGame; }
-    bool isPauseGame() { return exitGame; }
+    bool isExitGame() const { return exitGame; }
+    bool isPauseGame() const { return exitGame; }
 
     Game(const Game&);
     Game & operator = (const Game &);
@@ -32,6 +33,7 @@ private:
     GameInfo* info = nullptr;
     bool exitGame = false;
     bool pauseGame = false;
+    Stepper* step = nullptr;
 };
 
 #endif /* GAME_H */

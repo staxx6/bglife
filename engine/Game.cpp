@@ -2,14 +2,10 @@
 
 #include "Game.h"
 
-// Game::Game()
-// {
-//     std::cout << "Game constructor nothing" << std::endl;
-// }
-
 Game::Game(GameInfo* info) 
 {
     this->info = info;
+    step = new Stepper(Stepper::Type::NORMAL); //PERHAPS constructor with variable
     
     std::cout << "Game constructor with info" << std::endl;
 }
@@ -17,6 +13,7 @@ Game::Game(GameInfo* info)
 int Game::init() 
 {
     std::cout << "init from Game" << std::endl;
+
 
     return 0;
 }
@@ -44,10 +41,19 @@ int Game::start()
     {
         while(!pauseGame && !exitGame)
         {
-            update();
-            render();
+            if(step->timeToUpdate()) {
+                update();
+            }
+            step->updateFinished();
+            if(step->timeToRender())
+            {
+                render();
+            }
+            step->renderFinished();
         }
+        step->paused();
     }
+    step->exit();
 
     return 0;
 }
@@ -55,4 +61,5 @@ int Game::start()
 Game::~Game()
 {
     std::cout << "Game destructor" << std::endl;
+    delete(step);
 }
