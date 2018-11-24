@@ -12,16 +12,26 @@ public:
     Game(GameInfo*);
     virtual ~Game();
 
+    int start();
+
+    GameInfo *getGameInfo() const { return info; }
+    void setExitGame(bool exit) { exitGame = exit; }
+    void setPauseGame(bool pause) { pauseGame = pause; }
+    bool isExitGame() { return exitGame; }
+    bool isPauseGame() { return exitGame; }
+
+    Game(const Game&);
+    Game & operator = (const Game &);
+    
+protected:
     virtual int init();
     virtual int update();
     virtual int render();
-
-    GameInfo *getGameInfo() const { return info; }
-
-protected:
-
+    
 private:
-    GameInfo* info;
+    GameInfo* info = nullptr;
+    bool exitGame = false;
+    bool pauseGame = false;
 };
 
 #endif /* GAME_H */

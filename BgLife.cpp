@@ -10,8 +10,7 @@ int main()
     info.setVersion("0.1");
 
     BgLife app(&info);
-
-    app.init();
+    app.start();
 
     return 0;
 }
@@ -24,7 +23,7 @@ BgLife::BgLife(GameInfo* info) : Game(info)
 
 int BgLife::init()
 {
-    
+    std::cout << "BgLife init: "  << std::endl;
 
     return 0;
 }
@@ -32,14 +31,19 @@ int BgLife::init()
 
 int BgLife::update()
 {
-    
+    std::cout << "BgLife update: "  << std::endl;
+
+    if(ticks++ > 2)
+    {
+        setExitGame(true);
+    } 
 
     return 0;
 }
 
 int BgLife::render()
 {
-    
+    std::cout << "BgLife render: "  << std::endl;
 
     return 0;
 }

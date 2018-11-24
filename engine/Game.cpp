@@ -23,11 +23,32 @@ int Game::init()
 
 int Game::update() 
 {
+    std::cout << "Game update: "  << std::endl;
+
     return 0;
 }
 
 int Game::render() 
 {
+    std::cout << "Game render: "  << std::endl;
+
+    return 0;
+}
+
+int Game::start() 
+{
+    std::cout << "Game start: "  << std::endl;
+    init();
+
+    while(!exitGame)
+    {
+        while(!pauseGame && !exitGame)
+        {
+            update();
+            render();
+        }
+    }
+
     return 0;
 }
 

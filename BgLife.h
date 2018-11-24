@@ -15,7 +15,7 @@ public:
 protected:
 
 private:
-
+    int ticks = 0; // Debug ticks (currently no input)
 };
 
 #endif /* BGLIFE_H */
