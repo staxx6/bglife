@@ -5,7 +5,10 @@
 Game::Game(GameInfo* info) 
 {
     this->info = info;
-    step = new Stepper(Stepper::Type::NORMAL); //PERHAPS constructor with variable
+
+    // TODO2 constructor with type variable
+    // Game type?
+    step = new Stepper(Stepper::Type::TERMINAL, 0, 0); 
     
     std::cout << "Game constructor with info" << std::endl;
 }
@@ -41,11 +44,11 @@ int Game::start()
     {
         while(!pauseGame && !exitGame)
         {
-            if(step->timeToUpdate()) {
+            if(step->isTimeToUpdate()) {
                 update();
             }
             step->updateFinished();
-            if(step->timeToRender())
+            if(step->isTimeToRender())
             {
                 render();
             }
