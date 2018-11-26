@@ -9,7 +9,6 @@
 class Game 
 {
 public:
-    // Game();
     Game(GameInfo*);
     virtual ~Game();
 
@@ -31,6 +30,8 @@ protected:
     
 private:
     GameInfo* info = nullptr;
+
+    bool firstFrame = true;
     bool exitGame = false;
     bool pauseGame = false;
     Stepper* step = nullptr;

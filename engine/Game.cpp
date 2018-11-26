@@ -8,7 +8,7 @@ Game::Game(GameInfo* info)
 
     // TODO2 constructor with type variable
     // Game type?
-    step = new Stepper(Stepper::Type::TERMINAL, 0, 0); 
+    step = new Stepper(Stepper::Type::TERMINAL, 0.8, 3); 
     
     std::cout << "Game constructor with info" << std::endl;
 }
@@ -40,23 +40,41 @@ int Game::start()
     std::cout << "Game start: "  << std::endl;
     init();
 
+    // prevent render bevore first update
+    if(firstFrame) 
+    {
+        update();
+        firstFrame = false;
+    }
+
     while(!exitGame)
     {
         while(!pauseGame && !exitGame)
         {
-            if(step->isTimeToUpdate()) {
-                update();
-            }
-            step->updateFinished();
-            if(step->isTimeToRender())
+            if(!step->isTimeToUpdate() && !step->isTimeToRender())
             {
-                render();
+                step->letSleep();
             }
-            step->renderFinished();
+            else
+            {
+                if(step->isTimeToUpdate()) {
+                    update();
+                    step->updateFinished();
+                }
+                if(step->isTimeToRender())
+                {
+                    render();
+                    step->renderFinished();
+                }
+            }
         }
         step->paused();
     }
     step->exit();
+
+
+    std::cout << "UpdateTicks: " << step->getUpdateSteps() << std::endl;
+    std::cout << "FrameTicks: " << step->getRenderSteps() << std::endl;
 
     return 0;
 }

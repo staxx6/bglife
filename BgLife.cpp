@@ -33,7 +33,7 @@ int BgLife::update()
 {
     std::cout << "BgLife update: "  << std::endl;
 
-    if(ticks++ > 2)
+    if(ticks++ > 3)
     {
         setExitGame(true);
     } 

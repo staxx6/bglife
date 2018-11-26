@@ -3,6 +3,9 @@
 
 /*
     This class defines timings for the game loop
+
+    Terminal uses thread sleep which shouldn't be a
+    problem if it's not a time critical game
 */
 
 #include <chrono>
@@ -18,7 +21,7 @@ public:
 
     // type, updates per sec, render per sec
     // PERHAPS mins if too fast for terminal
-    Stepper(Type, int, int);
+    Stepper(Type, double update, double render);
     ~Stepper();
 
     // TODO inline
@@ -27,6 +30,11 @@ public:
 
     void updateFinished();
     void renderFinished();
+
+    void letSleep();
+
+    int getUpdateSteps() { return updateSteps; }
+    int getRenderSteps() { return renderSteps; }
 
     void paused();
     void exit();
@@ -39,13 +47,28 @@ protected:
 
 private:
     Type type = Type::NORMAL;
-    unsigned long steps = 0;
+    // FIXME unsigned long big enough?
+    unsigned long updateSteps = 0;
+    unsigned long renderSteps = 0;
     unsigned long updateRate; // nanoseconds
     unsigned long renderRate; // nanoseconds
 
-    std::chrono::high_resolution_clock::time_point currentTime;
-    std::chrono::high_resolution_clock::time_point lastTime;
-    std::chrono::high_resolution_clock::time_point diff;
+    // Update
+    std::chrono::high_resolution_clock::time_point currentTime_u;
+    std::chrono::high_resolution_clock::time_point lastTime_u;
+    std::chrono::high_resolution_clock::duration diff_u;
+
+    // Render
+    std::chrono::high_resolution_clock::time_point currentTime_r;
+    std::chrono::high_resolution_clock::time_point lastTime_r;
+    std::chrono::high_resolution_clock::duration diff_r;
+
+    // Sleep
+    std::chrono::high_resolution_clock::time_point sleep_to_u;
+    std::chrono::high_resolution_clock::duration sleep_diff_u;
+
+    std::chrono::high_resolution_clock::time_point sleep_to_r;
+    std::chrono::high_resolution_clock::duration sleep_diff_r;
 };
 
 #endif /* STEPPER_H */

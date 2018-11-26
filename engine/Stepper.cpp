@@ -1,14 +1,19 @@
 #include <iostream>
+#include <thread>
 
 #include "Stepper.h"
 
-Stepper::Stepper(Type type, int update, int render)
+Stepper::Stepper(Type type, double update, double render)
 {
+    // FIXME update, render only >= 0 (zero division!)
     std::cout << "Stepper constructor" << std::endl;
+
+    this->type = type;
     std::cout << "Stepper in mode: " << static_cast<int>(type) << std::endl;
 
     updateRate = 1000000000 / update;
     renderRate = 1000000000 / render;
+    lastTime_u = lastTime_r = std::chrono::high_resolution_clock::now();
 }
 
 Stepper::~Stepper()
@@ -16,37 +21,80 @@ Stepper::~Stepper()
     std::cout << "Stepper deconstructor" << std::endl;
 }
 
+// Currently only TERMINAL
+// -> currentTime - lastTime >= update/sec ( 1000 / 1 = 1000) 
 bool Stepper::isTimeToUpdate()
 {
     if(type == Type::TERMINAL)
     {
-        diff = std::chrono::high_resolution_clock::now()
-                - lastTime;
-        if( std::chrono::duration <double, std::nano> (diff).count()
+        diff_u = std::chrono::high_resolution_clock::now()
+                    - lastTime_u;
+
+        if(std::chrono::duration <double, std::nano>(diff_u).count()
             >= updateRate)
         {
-
+            return true;
         }
-        //currentTime - lastTime  =     >=   update/sec ( 1000 / 1 = 1000) 
-        //1500          100     500             1000 
-
     }
-    return true;
+    return false;
 }
 
+// TODO duplicate (another function jump wouldn't be good?)
 bool Stepper::isTimeToRender()
 {
-    return true;
+    if(type == Type::TERMINAL)
+    {
+        diff_r = std::chrono::high_resolution_clock::now()
+                    - lastTime_r;
+
+        if(std::chrono::duration <double, std::nano>(diff_r).count()
+            >= renderRate)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void Stepper::updateFinished()
 {
-
+    lastTime_u = std::chrono::high_resolution_clock::now();
+    updateSteps++;
 }
 
 void Stepper::renderFinished()
 {
+    lastTime_r = std::chrono::high_resolution_clock::now();
+    renderSteps++;
+}
 
+void Stepper::letSleep()
+{
+
+    sleep_to_u = lastTime_u + std::chrono::nanoseconds(updateRate);
+    sleep_diff_u = sleep_to_u - std::chrono::high_resolution_clock::now();
+
+    sleep_to_r = lastTime_r + std::chrono::nanoseconds(renderRate);
+    sleep_diff_r = sleep_to_r - std::chrono::high_resolution_clock::now();
+
+    if(sleep_diff_u > sleep_diff_r)
+    {
+        // std::cout << "choose render sleep" << std::endl;
+        std::this_thread::sleep_for(
+            std::chrono::nanoseconds(
+                sleep_diff_r
+            )
+        );
+    }
+    else
+    {
+        // std::cout << "choose update sleep" << std::endl;
+        std::this_thread::sleep_for(
+            std::chrono::nanoseconds(
+                sleep_diff_u
+            )
+        );
+    }
 }
 
 void Stepper::paused()
