@@ -1,13 +1,16 @@
 #include <iostream>
 
 #include "engine/Game.h"
+#include "engine/DebugPrint.h"
 #include "BgLife.h"
 
 int main()
 {
     GameInfo info;
-    info.setName("Background Life");
-    info.setVersion("0.1");
+    info.name = "Background Life";
+    info.version = "0.1";
+    info.debugType = DebugPrint::Type::TERMINAL;
+    info.debugLevel = DebugPrint::Level::VERBOSE_0;
 
     BgLife app(&info);
     app.start();
@@ -17,13 +20,15 @@ int main()
 
 BgLife::BgLife(GameInfo* info) : Game(info)
 {   
-    std::cout << "BgLife constructor gameName: " 
-        << getGameInfo()->getName() << std::endl;
+    printVV("BgLife constructor gameName: " + info->name);
 }
 
 int BgLife::init()
 {
-    std::cout << "BgLife init: "  << std::endl;
+    Game::init();
+    printVV("BgLife init: ");
+
+    printN("My very first game!");
 
     return 0;
 }
@@ -31,7 +36,8 @@ int BgLife::init()
 
 int BgLife::update()
 {
-    std::cout << "BgLife update: "  << std::endl;
+    Game::update();
+    printVV("BgLife update: ");
 
     if(ticks++ > 3)
     {
@@ -43,13 +49,13 @@ int BgLife::update()
 
 int BgLife::render()
 {
-    std::cout << "BgLife render: "  << std::endl;
+    Game::render();
+    printVV("BgLife render: ");
 
     return 0;
 }
 
 BgLife::~BgLife()
 {
-    //Game::~Game();
-    std::cout << "BgLife destructor" << std::endl;
+    printVV("BgLife destructor: ");
 }

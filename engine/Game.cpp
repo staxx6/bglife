@@ -1,43 +1,46 @@
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include "Game.h"
 
 Game::Game(GameInfo* info) 
 {
     this->info = info;
+    this->debug = new DebugPrint(info->debugType, 
+        info->debugLevel);
 
+    printVVV("Game constructor: ");
+        
     // TODO2 constructor with type variable
     // Game type?
-    step = new Stepper(Stepper::Type::TERMINAL, 0.8, 3); 
-    
-    std::cout << "Game constructor with info" << std::endl;
+    step = new Stepper(Stepper::Type::TERMINAL, 1, 1); 
 }
 
 int Game::init() 
 {
-    std::cout << "init from Game" << std::endl;
-
+    printVVV("Game init: ");
 
     return 0;
 }
 
 int Game::update() 
 {
-    std::cout << "Game update: "  << std::endl;
+    printVVV("Game update: ");
 
     return 0;
 }
 
 int Game::render() 
 {
-    std::cout << "Game render: "  << std::endl;
+    printVVV("Game render: ");
 
     return 0;
 }
 
 int Game::start() 
 {
-    std::cout << "Game start: "  << std::endl;
+    printVVV("Game start: ");
     init();
 
     // prevent render bevore first update
@@ -72,15 +75,15 @@ int Game::start()
     }
     step->exit();
 
-
-    std::cout << "UpdateTicks: " << step->getUpdateSteps() << std::endl;
-    std::cout << "FrameTicks: " << step->getRenderSteps() << std::endl;
+    printV(std::string("Update steps count: ") + std::to_string(step->getUpdateSteps()));
+    printV(std::string("Frame steps count: ") + std::to_string(step->getRenderSteps()));
 
     return 0;
 }
 
 Game::~Game()
 {
-    std::cout << "Game destructor" << std::endl;
+    printVVV("Game destructor: ");
     delete(step);
+    delete(debug);
 }

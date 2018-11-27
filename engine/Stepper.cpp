@@ -6,10 +6,8 @@
 Stepper::Stepper(Type type, double update, double render)
 {
     // FIXME update, render only >= 0 (zero division!)
-    std::cout << "Stepper constructor" << std::endl;
 
     this->type = type;
-    std::cout << "Stepper in mode: " << static_cast<int>(type) << std::endl;
 
     updateRate = 1000000000 / update;
     renderRate = 1000000000 / render;
@@ -18,7 +16,7 @@ Stepper::Stepper(Type type, double update, double render)
 
 Stepper::~Stepper()
 {
-    std::cout << "Stepper deconstructor" << std::endl;
+
 }
 
 // Currently only TERMINAL
@@ -79,7 +77,6 @@ void Stepper::letSleep()
 
     if(sleep_diff_u > sleep_diff_r)
     {
-        // std::cout << "choose render sleep" << std::endl;
         std::this_thread::sleep_for(
             std::chrono::nanoseconds(
                 sleep_diff_r
@@ -88,7 +85,6 @@ void Stepper::letSleep()
     }
     else
     {
-        // std::cout << "choose update sleep" << std::endl;
         std::this_thread::sleep_for(
             std::chrono::nanoseconds(
                 sleep_diff_u

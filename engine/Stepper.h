@@ -33,8 +33,8 @@ public:
 
     void letSleep();
 
-    int getUpdateSteps() { return updateSteps; }
-    int getRenderSteps() { return renderSteps; }
+    unsigned long getUpdateSteps() { return updateSteps; }
+    unsigned long getRenderSteps() { return renderSteps; }
 
     void paused();
     void exit();
@@ -47,7 +47,7 @@ protected:
 
 private:
     Type type = Type::NORMAL;
-    // FIXME unsigned long big enough?
+    // FIXME type correct?
     unsigned long updateSteps = 0;
     unsigned long renderSteps = 0;
     unsigned long updateRate; // nanoseconds
@@ -66,7 +66,7 @@ private:
     // Sleep
     std::chrono::high_resolution_clock::time_point sleep_to_u;
     std::chrono::high_resolution_clock::duration sleep_diff_u;
-
+    
     std::chrono::high_resolution_clock::time_point sleep_to_r;
     std::chrono::high_resolution_clock::duration sleep_diff_r;
 };

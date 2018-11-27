@@ -3,20 +3,14 @@
 
 #include <string>
 
-class GameInfo
-{
-public:
-    void setName(std::string name) { this->name = name; }
-    void setVersion(std::string version) { this->version = version; }
-    std::string getName() const { return name; }
-    std::string getVersion() const { return version; }
+#include "DebugPrint.h"
 
-protected:
-    
-
-private:
+struct GameInfo {
     std::string name = "No name";
     std::string version = "-1";
+
+    DebugPrint::Type debugType = DebugPrint::Type::TERMINAL;
+    DebugPrint::Level debugLevel = DebugPrint::Level::NORMAL;
 };
 
 #endif /* GAMEINFO_H */

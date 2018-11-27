@@ -2,7 +2,7 @@
 CC=/bin/g++
 CFLAGS= -Wall -Weffc++ -Wextra -Wsign-conversion
 
-OBJ = engine/Stepper.o engine/Game.o
+OBJ = engine/Stepper.o engine/Game.o engine/DebugPrint.o
 
 main: $(OBJ) BgLife.cpp BgLife.h
 	$(CC) $(CFLAGS) BgLife.cpp -o BgLife $(OBJ)

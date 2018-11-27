@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "DebugPrint.h"
 #include "GameInfo.h"
 #include "Stepper.h"
 
@@ -20,6 +21,13 @@ public:
     bool isExitGame() const { return exitGame; }
     bool isPauseGame() const { return exitGame; }
 
+    void printE(std::string msg) { debug->print(msg, DebugPrint::Level::ERROR); };
+    void printW(std::string msg) { debug->print(msg, DebugPrint::Level::WARN); };
+    void printN(std::string msg) { debug->print(msg, DebugPrint::Level::NORMAL); };
+    void printV(std::string msg) { debug->print(msg, DebugPrint::Level::VERBOSE_0); };
+    void printVV(std::string msg) { debug->print(msg, DebugPrint::Level::VERBOSE_1); };
+    void printVVV(std::string msg) { debug->print(msg, DebugPrint::Level::VERBOSE_2); };
+
     Game(const Game&);
     Game & operator = (const Game &);
     
@@ -30,6 +38,7 @@ protected:
     
 private:
     GameInfo* info = nullptr;
+    DebugPrint* debug = nullptr;
 
     bool firstFrame = true;
     bool exitGame = false;
