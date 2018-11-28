@@ -3,8 +3,9 @@
 #include <sstream>
 
 #include "Game.h"
+#include "State.h"
 
-Game::Game(GameInfo* info) 
+Game::Game(GameInfo *info) 
 {
     this->info = info;
     this->debug = new DebugPrint(info->debugType, 
@@ -17,36 +18,26 @@ Game::Game(GameInfo* info)
     step = new Stepper(Stepper::Type::TERMINAL, 1, 1); 
 }
 
-int Game::init() 
+void Game::addState(State *state)
 {
-    printVVV("Game init: ");
-
-    return 0;
+    states.insert(std::pair<int, State *>(state->getId(), state));
 }
 
-int Game::update() 
+void Game::setCurrentState(int id)
 {
-    printVVV("Game update: ");
-
-    return 0;
-}
-
-int Game::render() 
-{
-    printVVV("Game render: ");
-
-    return 0;
+    currentState = states[id];
 }
 
 int Game::start() 
 {
     printVVV("Game start: ");
-    init();
+    currentState->init();
 
     // prevent render bevore first update
     if(firstFrame) 
     {
-        update();
+        //update();
+        currentState->update();
         firstFrame = false;
     }
 
@@ -56,17 +47,18 @@ int Game::start()
         {
             if(!step->isTimeToUpdate() && !step->isTimeToRender())
             {
+                // FIXME only for terminal
                 step->letSleep();
             }
             else
             {
                 if(step->isTimeToUpdate()) {
-                    update();
+                    currentState->update();
                     step->updateFinished();
                 }
                 if(step->isTimeToRender())
                 {
-                    render();
+                    currentState->render();
                     step->renderFinished();
                 }
             }
@@ -86,4 +78,6 @@ Game::~Game()
     printVVV("Game destructor: ");
     delete(step);
     delete(debug);
+
+    // TODO! delete states array!
 }

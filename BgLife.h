@@ -8,10 +8,7 @@ class BgLife : public Game
 public:
     BgLife(GameInfo* info);
     ~BgLife() override;
-
-    int init() override;
-    int update() override;
-    int render() override;
+    
 protected:
 
 private:
